@@ -1,0 +1,27 @@
+{
+  "name": "amazon-fiona",
+  "version": "1.0.0",
+  "description": "A small javascript library to manipulate Kindle cloud libraries",
+  "main": "fiona-lib.js",
+  "scripts": {
+    "test": "grunt karma:unit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fatso83/amazon_fiona_js.git"
+  },
+  "author": "Carl-Erik Kopseng (carlerik@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fatso83/amazon_fiona_js/issues"
+  },
+  "homepage": "https://github.com/fatso83/amazon_fiona_js",
+  "devDependencies": {
+    "grunt-karma": "~0.6.2",
+    "grunt": "~0.4.2",
+    "mocha": "~1.17.0",
+    "karma-mocha": "~0.1.1",
+    "karma-sinon": "~1.0.0",
+    "karma-expect": "~1.0.0"
+  }
+}
