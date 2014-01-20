@@ -41,7 +41,7 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    // autoWatch: true, // set in the Gruntfile by using the grunt-watch task
 
 
     // Start these browsers, currently available:
@@ -61,6 +61,6 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: false
+    singleRun: true
   });
 };

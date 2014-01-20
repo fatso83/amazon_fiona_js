@@ -1,6 +1,6 @@
 describe("Fetching of personal documents", function() {
     it("should do something", function() {
-        expect(1+1).to.be(3);
+        expect(1+1).to.be(2);
     });
 });
 
