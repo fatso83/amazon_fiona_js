@@ -13,22 +13,6 @@ describe("Fetching of personal documents", function() {
   beforeEach(function() { requests = []; });
 
   it("should call an amazon uri", function() {
-    var callback = sinon.spy()
-      , AmazonFiona = {
-
-    /** 
-     * @param options.offset  default 0
-     * @param options.count default 15
-     */
-        personal_docs : function(options) {
-          var r = new XMLHttpRequest();
-          r.open("GET", "http://www.amazon.com/", true);
-          r.onload = function () {
-            // do something
-          };
-          r.send();
-        }
-      };
 
       AmazonFiona.personal_docs();
 
@@ -36,8 +20,17 @@ describe("Fetching of personal documents", function() {
       expect(requests[0].url).to.match(/amazon.com/);
   });
 
-
+  commonFetchTests('personal_docs');
 });
+
+describe("Fetching of book titles", function() {
+  commonFetchTests('book_titles');
+});
+
+function commonFetchTests(methodName) {
+  it("should be callable without parameters");
+  it("should add an offset to the query when specified");
+}
 
 /*
    import requests, re, sys, json
