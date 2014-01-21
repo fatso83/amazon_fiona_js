@@ -8,44 +8,74 @@ describe("Fetching of personal documents", function() {
     xhr = sinon.useFakeXMLHttpRequest();
     xhr.onCreate = function(xhr) {
       requests.push(xhr);
-    }; 
+
+      xhr.respond(200, 
+                  'Content-Type: application/json',
+                  '{ "items" : [] }'
+                 );
+    };
   });
   beforeEach(function() { requests = []; });
 
-  it("should call an amazon uri", function() {
+  it("should call the personal docs uri", function() {
+    var match = /amazon.com.*queryPdocs.html/;
+    testFunctionCallsMatchingUri('personal_docs', match);
+  });
 
-      AmazonFiona.personal_docs();
-
-      expect(requests).to.have.length(1);
-      expect(requests[0].url).to.match(/amazon.com/);
+  it("should return a list of personal documents", function(done) {
+    //done('error');
+    done();
   });
 
   commonFetchTests('personal_docs');
 });
 
 describe("Fetching of book titles", function() {
+  beforeEach(function() { requests = []; });
+
   commonFetchTests('book_titles');
+
+  it("should call the books uri", function() {
+    var match = /amazon.com.*queryOwnership_refactored2.html/;
+    testFunctionCallsMatchingUri('book_titles', match);
+  });
+
+  it("should return a list of books");
 });
 
+function testFunctionCallsMatchingUri(methodName, match) {
+    AmazonFiona[methodName]();
+    expect(requests).to.have.length(1);
+    expect(requests[0].url).to.match(match);
+}
+
 function commonFetchTests(methodName) {
-  it("should be callable without parameters");
-  it("should add an offset to the query when specified");
+
+  it("should be callable without parameters", function() {
+    expect(AmazonFiona[methodName]).not.to.throwException();
+  });
+
+  it('should have a default offset of 0', function() {
+    AmazonFiona[methodName]();
+    expect(requests[0].requestBody.offset).to.be(0);
+  });
+
+  it("should add a count to the query when specified", function() {
+    AmazonFiona[methodName]({count : 11});
+    expect(requests[0].requestBody.count).to.be(11);
+  });
+
+  it("should add an offset to the query when specified", function() {
+    AmazonFiona[methodName]({offset : 33});
+    expect(requests[0].requestBody.offset).to.be(33);
+  });
+
+  it("should call the specified callback on success", function(done) {
+    AmazonFiona[methodName]({callback: done});
+  });
 }
 
 /*
-   import requests, re, sys, json
-   from bs4 import BeautifulSoup
-   from html.parser import HTMLParser
-
-   #The session object that persists cookies and default values across requests
-   s = requests.Session()
-   h = HTMLParser();
-   amazon = 'https://www.amazon.com'
-
-   def usage():
-   print("USAGE:", sys.argv[0], " <email> <username> ")
-   sys.exit(1);
-
    def essential_info_string(item):
    return '[' + item['asin'] + ']  ' + h.unescape(item['title'])
 
