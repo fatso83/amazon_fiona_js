@@ -20,7 +20,8 @@ module.exports = function (grunt) {
         reporters: 'dots',
         singleRun: false,
 
-        browsers: ['Chrome', 'PhantomJS'],
+        //browsers: ['Chrome', 'PhantomJS'],
+        browsers: ['Chrome'],
 
         /* The background option will tell grunt to run karma in a child process so it doesn't block subsequent grunt tasks. */
         background : true

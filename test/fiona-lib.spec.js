@@ -1,146 +1,135 @@
 var server
-  , xhr
-  , requests;
+    , expect = SinonExpect.enhance(expect, sinon, "was")
+    , pDocsResponse = '{ "isError":0,"signInRequired":0,"debug":"","error":"","data":{ "totalCount":315,"hasMore":1,"contentType":"Personal Documents","offset":0,"items":[ { "orderDateNumerical":"2014-02-03T11:32:36","numericSize":106760,"orderDate":"February 3, 2014","filters":{ "Personal Documents":1 },"author":"Instapaper","size":"104.3 KB","capability":[ "EMAIL_ALIAS_SUPPORTED" ],"image":"https://images-na.ssl-images-amazon.com/images/G/01/digital/fiona/myk/pdoc._V155869332_.png","renderDownloadElements":1,"asin":"3I67T5EOUSORRLZKHA7TN2BOOHS5MKTB","category":"kindle_pdoc","title":"Instapaper: Monday, Feb. 3","isNotYetLaunched":0 },{ "orderDateNumerical":"2014-01-31T15:48:20","numericSize":96796,"orderDate":"January 31, 2014","filters":{ "Personal Documents":1 },"author":"Instapaper","size":"94.5 KB","capability":[ "EMAIL_ALIAS_SUPPORTED" ],"image":"https://images-na.ssl-images-amazon.com/images/G/01/digital/fiona/myk/pdoc._V155869332_.png","renderDownloadElements":1,"asin":"U3ON3EOTR5IYG6DFXIK6OLOCMZDEGILC","category":"kindle_pdoc","title":"Instapaper: Friday, Jan. 31","isNotYetLaunched":0 }] },"json":1 }'
+    , ownedResponse = '{ "isError":0,"signInRequired":0,"debug":"","error":"","data":{ "callMethod":"parallel","loanCount":0,"freeDictCount":2,"totalCount":76,"rentalCount":0,"updatableCount":0,"userGuideCount":7,"refundableCount":0,"hasMore":1,"dimsumCount":0,"offset":0,"items":[ { "refundEligibility":{ "resultCode":"FAIL_AGE","isEligible":0,"message":"You can only return content purchased in the last seven days. To return this item, please contact customer service at 1-866-321-8851." },"canReadNow":1,"bindingDisplay":"","authorOrPronunciation":"GmbH, PONS","binding":"","dpURL":"/gp/product/B00GQOF3WE/ref=kinw_myk_ro_title","author":"GmbH, PONS","udlGuid":"33C1A9C3","filters":{  },"titleOrPronunciation":"PONS Advanced German -&gt; English Dictionary / PONS W&ouml;rterbuch Deutsch -&gt; Englisch Advanced (German Edition)","isNellOptimized":0,"asin":"B00GQOF3WE","category":"fiona_ebook","isNotYetLaunched":0,"orderDateEpoch":1388013314,"orderID":"D01-6416539-1093654","excluded_device_types":[  ],"isPottermore":0,"orderDateNumerical":"2013-12-25T15:15:14","isPurchased":1,"orderDate":"December 25, 2013","capability":[ "EBOK_PURCHASE_ALLOWED" ],"orderDetails":"View order details on Amazon.com","image":"https://images-na.ssl-images-amazon.com/images/I/41xgqfWqOTL._SX105_.jpg","isUpdateAvailable":"FALSE","summaryHref":"https://www.amazon.com:443/gp/redirect.html?ie=UTF8&location=https%3A%2F%2Fwww.amazon.com%2Fgp%2Fdigital%2Fyour-account%2Forder-summary.html%3ForderID%3DD01-6416539-1093654&token=661ABEA050EC7ED103349320C53489637F654274","renderDownloadElements":1,"firstOrderDate":"1388013313.652","title":"PONS Advanced German -&gt; English Dictionary / PONS W&ouml;rterbuch Deutsch -&gt; Englisch Advanced (German Edition)" },{ "refundEligibility":{ "resultCode":"FAIL_AGE","isEligible":0,"message":"You can only return content purchased in the last seven days. To return this item, please contact customer service at 1-866-321-8851." },"canReadNow":1,"bindingDisplay":"","authorOrPronunciation":"Rippetoe, Mark","binding":"","dpURL":"/gp/product/B006XJR5ZA/ref=kinw_myk_ro_title","author":"Rippetoe, Mark","udlGuid":"39A61C3E","filters":{  },"titleOrPronunciation":"Starting Strength","isNellOptimized":0,"asin":"B006XJR5ZA","category":"fiona_ebook","isNotYetLaunched":0,"orderDateEpoch":1386774584,"orderID":"D01-5752650-3093611","excluded_device_types":[  ],"isPottermore":0,"orderDateNumerical":"2013-12-11T07:09:44","isPurchased":1,"orderDate":"December 11, 2013","capability":[ "EBOK_PURCHASE_ALLOWED" ],"orderDetails":"View order details on Amazon.com","image":"https://images-na.ssl-images-amazon.com/images/I/51qninUnshL._SX105_.jpg","isUpdateAvailable":"FALSE","summaryHref":"https://www.amazon.com:443/gp/redirect.html?ie=UTF8&location=https%3A%2F%2Fwww.amazon.com%2Fgp%2Fdigital%2Fyour-account%2Forder-summary.html%3ForderID%3DD01-5752650-3093611&token=661ABEA050EC7ED103349320C53489637F654274","renderDownloadElements":1,"firstOrderDate":"1386774582.52","title":"Starting Strength" },{ "refundEligibility":{ "resultCode":"FAIL_AGE","isEligible":0,"message":"You can only return content purchased in the last seven days. To return this item, please contact customer service at 1-866-321-8851." },"canReadNow":1,"bindingDisplay":"","authorOrPronunciation":"Vermes, Timur","binding":"","dpURL":"/gp/product/B008NW1M4K/ref=kinw_myk_ro_title","author":"Vermes, Timur","udlGuid":"AC797659","filters":{  },"titleOrPronunciation":"Er ist wieder da: Der Roman (German Edition)","isNellOptimized":0,"asin":"B008NW1M4K","category":"fiona_ebook","isNotYetLaunched":0,"orderDateEpoch":1374093260,"orderID":"D01-3099356-0130453","excluded_device_types":[  ],"isPottermore":0,"orderDateNumerical":"2013-07-17T13:34:20","isPurchased":1,"orderDate":"July 17, 2013","capability":[ "EBOK_PURCHASE_ALLOWED" ],"orderDetails":"View order details on Amazon.com","image":"https://images-na.ssl-images-amazon.com/images/I/31zFDOJLXCL._SX105_.jpg","isUpdateAvailable":"FALSE","summaryHref":"https://www.amazon.com:443/gp/redirect.html?ie=UTF8&location=https%3A%2F%2Fwww.amazon.com%2Fgp%2Fdigital%2Fyour-account%2Forder-summary.html%3ForderID%3DD01-3099356-0130453&token=661ABEA050EC7ED103349320C53489637F654274","renderDownloadElements":1,"firstOrderDate":1374093260,"title":"Er ist wieder da: Der Roman (German Edition)" },{ "refundEligibility":{ "resultCode":"FAIL_CATEGORY","isEligible":0,"message":"To return this item, please contact customer service at 1-866-321-8851." },"canReadNow":0,"bindingDisplay":"","authorOrPronunciation":"Die Zeit","binding":"","dpURL":"/gp/product/B004QZ9PQA/ref=kinw_myk_ro_title","author":"Die Zeit","udlGuid":"","filters":{  },"titleOrPronunciation":"DIE ZEIT","asin":"F_E_B00DV13SEK_B004QZ9PQA","category":"fiona_newspaper","isNotYetLaunched":0,"orderDateEpoch":1373961101,"orderID":"D01-4049273-6805643","isPottermore":0,"excluded_device_types":[ "AMWQ4871HHWW","A3N6ISSL0EPZWG","A2XIMM7ACS4GUS","A3BHV8OQ3W90PJ" ],"orderDateNumerical":"2013-07-16T00:51:41","isPurchased":1,"orderDate":"July 16, 2013","capability":[ "NWPR_PURCHASE_ALLOWED" ],"orderDetails":"View order details on Amazon.com","image":"https://images-na.ssl-images-amazon.com/images/I/41%2BMur4TElL._SX105_.jpg","isUpdateAvailable":"FALSE","summaryHref":"https://www.amazon.com:443/gp/redirect.html?ie=UTF8&location=https%3A%2F%2Fwww.amazon.com%2Fgp%2Fdigital%2Fyour-account%2Forder-summary.html%3ForderID%3DD01-4049273-6805643&token=661ABEA050EC7ED103349320C53489637F654274","renderDownloadElements":1,"firstOrderDate":1373961101,"title":"DIE ZEIT (July 11, 2013)" }],"contentType":"All" },"json":1 }';
 
-describe("Fetching of personal documents", function() {
 
-  before(function () {  
-    xhr = sinon.useFakeXMLHttpRequest();
-    xhr.onCreate = function(xhr) {
-      requests.push(xhr);
+describe("Resultset", function () {
+    var ResultSet = fiona._ResultSet;
 
-      xhr.respond(200, 
-                  'Content-Type: application/json',
-                  '{ "items" : [] }'
-                 );
-    };
-  });
-  beforeEach(function() { requests = []; });
+    it("should convert raw data of personal docs to a ResultSet", function () {
+        var result = new ResultSet(JSON.parse(pDocsResponse));
+        testIsResultSet(result);
+    });
 
-  it("should call the personal docs uri", function() {
-    var match = /amazon.com.*queryPdocs.html/;
-    testFunctionCallsMatchingUri('personal_docs', match);
-  });
+    it("should convert raw data of bought titles to a ResultSet", function () {
+        var result = new ResultSet(JSON.parse(ownedResponse));
+        testIsResultSet(result);
+    });
 
-  it("should return a list of personal documents", function(done) {
-    //done('error');
-    done();
-  });
+    it("should convert the raw  items to LibraryItems", function () {
+        var result = new ResultSet(JSON.parse(pDocsResponse))
+            , item = result.items[0];
 
-  commonFetchTests('personal_docs');
+        expect(result.items).to.have.length(2);
+        expect(item).to.be.an(Object);
+        expect(item).to.have.keys(["title", "author", "asin"]);
+    })
 });
 
-describe("Fetching of book titles", function() {
-  beforeEach(function() { requests = []; });
+describe("Fetching of personal documents", function () {
+    var findMethod = fiona.PersonalDoc.findAll;
 
-  commonFetchTests('book_titles');
+    serverSetupAndTeardown('queryPdocs.html', pDocsResponse);
 
-  it("should call the books uri", function() {
-    var match = /amazon.com.*queryOwnership_refactored2.html/;
-    testFunctionCallsMatchingUri('book_titles', match);
-  });
+    it("should call the personal docs uri", function () {
+        testFunctionCallsMatchingUri(findMethod);
+    });
 
-  it("should return a list of books");
+    it("should return a ResultSet", function (done) {
+        findMethod({
+            callback: function (result) {
+                testIsResultSet(result);
+
+                done();
+            }
+        });
+        server.respond();
+    });
+
+    commonFetchTests(findMethod);
 });
 
-function testFunctionCallsMatchingUri(methodName, match) {
-    AmazonFiona[methodName]();
-    expect(requests).to.have.length(1);
-    expect(requests[0].url).to.match(match);
+describe("Fetching of book titles", function () {
+    var findMethod = fiona.Ebook.findAll;
+    serverSetupAndTeardown('queryOwnership_refactored2.html', '{ "data": { "hasMore": 1, "items" : [] } }');
+
+    commonFetchTests(findMethod);
+
+    it("should call the books uri", function () {
+        testFunctionCallsMatchingUri(findMethod);
+    });
+});
+
+describe("Delete library item", function () {
+    serverSetupAndTeardown('fiona-delete.html', '');
+
+    it("should call the callback when finished", function (done) {
+        var item = new fiona.Ebook({ asin: "1234", orderID : "abc", title : "foo"})    ;
+        item.delete(done);
+        server.respond();
+    });
+
+    it("should silently drop requests to delete anything but personal documents");
+});
+
+function testFunctionCallsMatchingUri(method) {
+    var spy = sinon.spy();
+    method({ callback: spy });
+    server.respond();
+    expect(spy).was.called();
 }
 
-function commonFetchTests(methodName) {
+function commonFetchTests(method) {
 
-  it("should be callable without parameters", function() {
-    expect(AmazonFiona[methodName]).not.to.throwException();
-  });
+    it("should be callable without parameters", function () {
+        expect(method).not.to.throwException();
+    });
+    /*
+     it('should have a default offset of 0', function() {
+     fiona[methodName]();
+     expect(requests[0].requestBody.offset).to.be(0);
+     });
 
-  it('should have a default offset of 0', function() {
-    AmazonFiona[methodName]();
-    expect(requests[0].requestBody.offset).to.be(0);
-  });
+     it("should add a count to the query when specified", function() {
+     fiona[methodName]({count : 11});
+     expect(requests[0].requestBody.count).to.be(11);
+     });
 
-  it("should add a count to the query when specified", function() {
-    AmazonFiona[methodName]({count : 11});
-    expect(requests[0].requestBody.count).to.be(11);
-  });
+     it("should add an offset to the query when specified", function() {
+     fiona[methodName]({offset : 33});
+     expect(requests[0].requestBody.offset).to.be(33);
+     });
+     */
 
-  it("should add an offset to the query when specified", function() {
-    AmazonFiona[methodName]({offset : 33});
-    expect(requests[0].requestBody.offset).to.be(33);
-  });
-
-  it("should call the specified callback on success", function(done) {
-    AmazonFiona[methodName]({callback: done});
-  });
+    it("should call the specified callback on success", function (done) {
+        method({callback: function () {
+            done();
+        }});
+        server.respond();
+    });
 }
 
-/*
-   def essential_info_string(item):
-   return '[' + item['asin'] + ']  ' + h.unescape(item['title'])
 
-   def fetch_bought_titles(offset=0, count=15):
-   return fetch('queryOwnership_refactored2.html', offset, count)
+function testIsResultSet(result) {
+    expect(result).to.be.an(Object);
+    expect(result).to.have.key('totalCount');
+    expect(result).to.have.key('items');
+    expect(result).to.have.key('offset');
+}
 
-   def fetch_personal_docs(offset=0, count=15):
-   return fetch('queryPdocs.html', offset, count)
+function serverSetupAndTeardown(action, response) {
+    before(function () {
+        server = sinon.fakeServer.create();
+        server.respondWith("POST",
+            new RegExp('amazon.com.*' + action),
+            [ 200,
+                { 'Content-Type': 'text/html; charset=ISO-8859-1' },
+                response
+            ]);
+    });
 
-   def delete_title(content_id):
-   r = s.post(amazon+'/gp/digital/fiona/du/fiona-delete.html', data = {'contentName':content_id})
-
-   def fetch(action, offset, count):
-   r = s.post(amazon+'/gp/digital/fiona/manage/features/order-history/ajax/' + action,
-   data = {'offset':offset,'count':count} )
-   clean_json = remove_control_chars(r.text)
-   return json.loads(clean_json)['data']
-
-   def remove_control_chars(json_string):
-   """remove control characters that are illegal json. Amazon does not remove them"""
-   return re.sub('[\x00-\x1f]', '',json_string)
-
-   def init_session(email, password):
-   #we need to fake the user agent in order to get amazon to return anything other than 404
-   user_agent = "User-Agent:Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
-   extra_headers = { 'User-Agent' : user_agent }
-   s.headers.update(extra_headers)
-
-   r = s.get(amazon + '/gp/digital/fiona/manage')
-   soup = BeautifulSoup(r.content)
-   inputs = soup.find_all('input')
-
-   attributes = [i.attrs for i in inputs]
-   form_values = {}
-
-   for a in attributes:
-   form_values[a.get('name')] = a.get('value')
-   form_values.pop(None)
-
-   form_values['email'] = email
-   form_values['password'] = password
-
-   # This gets us in. The session cookies are crucial!
-   s.post( amazon + '/ap/signin',
-   data = form_values,
-   allow_redirects=True )
-
-   if __name__ == '__main__':
-   if len(sys.argv) < 3:
-   usage();
-
-   my_email = sys.argv[1]
-   my_password = sys.argv[2]
-
-   init_session(my_email, my_password)
-   docs = fetch_personal_docs()
-   books = fetch_bought_titles()
-
-status_docs = "Has %s personal documents. The last one is %s"
-status_books = "Has bought %s e-book titles from Amazon. The last one is %s"
-print(status_docs % (docs['totalCount'], h.unescape(docs['items'][0]['title'])))
-print(status_books % (books['totalCount'], h.unescape(books['items'][0]['title'])))
-print("Last 15 personal documents:")
-for doc in docs['items'][:15]:
-print(essential_info_string(doc).encode('utf-8'))
-
-
-*/
+    after(function () {
+        server.restore();
+    });
+}
