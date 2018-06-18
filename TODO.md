@@ -13,4 +13,4 @@ data:{"param":{"DeleteContent":{"asinDetails":{"3RSCWFGCUIZ3LD2EEROJUI6M5X63RAE2
 csrfToken:gEABCzVR2QsRk3F2QVkLcdKuQzYCPcpGkFNte0SAAAAAJAAAAAFkUgW5yYXcAAAAA
 ```
 
-The CSRF token is embedded in the HTML. Must be parsed, probably.
+The CSRF token is embedded in the HTML . Must be parsed, probably.
